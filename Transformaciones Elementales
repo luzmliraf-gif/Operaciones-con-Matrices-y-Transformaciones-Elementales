@@ -1,0 +1,216 @@
+import java.util.Scanner;
+
+public class AlgebraLineal {
+
+    static Scanner entrada = new Scanner(System.in);
+
+    // Mostrar matriz
+    public static void mostrarMatriz(double[][] matriz) {
+        for (double[] fila : matriz) {
+            for (double valor : fila) {
+                System.out.printf("%10.2f", valor);
+            }
+            System.out.println();
+        }
+    }
+
+    // Multiplicar matriz por vector
+    public static void multiplicarMatrizVector() {
+
+        System.out.println("\n--- MULTIPLICACION DE MATRIZ POR VECTOR ---");
+
+        System.out.print("Cantidad de filas: ");
+        int filas = entrada.nextInt();
+
+        System.out.print("Cantidad de columnas: ");
+        int columnas = entrada.nextInt();
+
+        double[][] matriz = new double[filas][columnas];
+        double[] vector = new double[columnas];
+
+        // Ingresar matriz
+        System.out.println("\nIngrese los valores de la matriz:");
+
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
+                System.out.print("A[" + (i+1) + "][" + (j+1) + "]: ");
+                matriz[i][j] = entrada.nextDouble();
+            }
+        }
+
+        // Ingresar vector
+        System.out.println("\nIngrese los valores del vector:");
+
+        for (int i = 0; i < columnas; i++) {
+            System.out.print("C[" + (i+1) + "]: ");
+            vector[i] = entrada.nextDouble();
+        }
+
+        // Mostrar matriz
+        System.out.println("\nMatriz ingresada:");
+        mostrarMatriz(matriz);
+
+        // Realizar multiplicacion
+        double[] resultados = new double[filas];
+
+        System.out.println("\nRESULTADOS:");
+
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
+                resultados[i] += matriz[i][j] * vector[j];
+            }
+
+            System.out.println("Fila " + (i+1) + ": "
+                    + resultados[i]);
+        }
+
+        // Buscar mayor resultado
+        double mayor = resultados[0];
+        int posicion = 0;
+
+        for (int i = 1; i < filas; i++) {
+            if (resultados[i] > mayor) {
+                mayor = resultados[i];
+                posicion = i;
+            }
+        }
+
+        System.out.println("\nMayor resultado: " + mayor);
+        System.out.println("Corresponde a la fila: "
+                + (posicion+1));
+    }
+
+    // Transformaciones elementales
+    public static void matrizTriangular() {
+
+        System.out.println("\n--- TRANSFORMACIONES ELEMENTALES ---");
+
+        System.out.print("Orden de la matriz cuadrada: ");
+        int n = entrada.nextInt();
+
+        double[][] matriz = new double[n][n];
+
+        // Ingresar matriz
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                System.out.print("A[" + (i+1) + "]["
+                        + (j+1) + "]: ");
+                matriz[i][j] = entrada.nextDouble();
+            }
+        }
+
+        System.out.println("\nMatriz original:");
+        mostrarMatriz(matriz);
+
+        System.out.println("\n1. Triangular superior");
+        System.out.println("2. Triangular inferior");
+
+        System.out.print("Seleccione una opcion: ");
+        int opcion = entrada.nextInt();
+
+        // Triangular superior
+        if (opcion == 1) {
+
+            for (int k = 0; k < n; k++) {
+
+                if (Math.abs(matriz[k][k]) < 1e-10) {
+                    for (int i = k + 1; i < n; i++) {
+                        if (Math.abs(matriz[i][k]) > 1e-10) {
+                            double[] temp = matriz[k];
+                            matriz[k] = matriz[i];
+                            matriz[i] = temp;
+                            break;
+                        }
+                    }
+                }
+
+                if (Math.abs(matriz[k][k]) < 1e-10) {
+                    continue;
+                }
+
+                for (int i = k + 1; i < n; i++) {
+                    double factor = matriz[i][k] / matriz[k][k];
+
+                    for (int j = 0; j < n; j++) {
+                        matriz[i][j] -= factor * matriz[k][j];
+                    }
+                }
+            }
+
+            System.out.println("\nMATRIZ TRIANGULAR SUPERIOR:");
+            mostrarMatriz(matriz);
+        }
+
+        // Triangular inferior
+        else if (opcion == 2) {
+
+            for (int k = n - 1; k >= 0; k--) {
+
+                if (Math.abs(matriz[k][k]) < 1e-10) {
+                    for (int i = 0; i < k; i++) {
+                        if (Math.abs(matriz[i][k]) > 1e-10) {
+                            double[] temp = matriz[k];
+                            matriz[k] = matriz[i];
+                            matriz[i] = temp;
+                            break;
+                        }
+                    }
+                }
+
+                if (Math.abs(matriz[k][k]) < 1e-10) {
+                    continue;
+                }
+
+                for (int i = 0; i < k; i++) {
+                    double factor = matriz[i][k] / matriz[k][k];
+
+                    for (int j = 0; j < n; j++) {
+                        matriz[i][j] -= factor * matriz[k][j];
+                    }
+                }
+            }
+
+            System.out.println("\nMATRIZ TRIANGULAR INFERIOR:");
+            mostrarMatriz(matriz);
+        }
+
+        else {
+            System.out.println("Opcion incorrecta.");
+        }
+    }
+
+    // Menu principal
+    public static void main(String[] args) {
+
+        int opcion;
+
+        do {
+            System.out.println("\n========== ALGEBRA LINEAL ==========");
+            System.out.println("1. Multiplicar matriz por vector");
+            System.out.println("2. Matriz triangular superior/inferior");
+            System.out.println("3. Salir");
+
+            System.out.print("\nSeleccione una opcion: ");
+            opcion = entrada.nextInt();
+
+            switch (opcion) {
+
+                case 1:
+                    multiplicarMatrizVector();
+                    break;
+
+                case 2:
+                    matrizTriangular();
+                    break;
+
+                case 3:
+                    System.out.println("Programa finalizado.");
+                    break;
+
+                default:
+                    System.out.println("Opcion no valida.");
+            }
+
+        } while (opcion != 3);
+    }
+}
