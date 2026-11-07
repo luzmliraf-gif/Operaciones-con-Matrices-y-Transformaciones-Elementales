@@ -1,7 +1,7 @@
 package algebralineal;
 
 import java.util.Scanner;
-
+// Código para operaciones con matrices en Java
 public class operacionesconmatrices {
 
     static Scanner entrada = new Scanner(System.in);
@@ -22,7 +22,7 @@ public class operacionesconmatrices {
         int filas = entrada.nextInt();
         System.out.print("Columnas de la matriz " + nombre + ": ");
         int columnas = entrada.nextInt();
-
+// Crear la matriz y llenarla con valores ingresados por el usuario
         double[][] matriz = new double[filas][columnas];
         System.out.println("Ingrese los valores de la matriz " + nombre + ":");
         for (int i = 0; i < filas; i++) {
